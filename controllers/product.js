@@ -16,7 +16,7 @@ var storage = multer.diskStorage({
 var uploadStore = multer({ storage: storage });
 
 const dbname = 'atnshop';
-const uri = 'mongodb+srv://leducanh:anh123456xf@cluster0.uinee.mongodb.net/Shopacc?retryWrites=true&w=majority' + dbname;
+const uri = 'mongodb+srv://leducanh:anh123456@cluster0.uinee.mongodb.net/atnshop?retryWrites=true&w=majority' + dbname;
 
 /// --- Code CONTROLLERs
 router.use(function timeLog (req, res, next) {

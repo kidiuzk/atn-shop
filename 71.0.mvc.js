@@ -149,28 +149,35 @@ app.get('/order', orderPage);
 function orderPage(req, res) {
     var xcontent = "";
 
-    console.log('\t ... get ORDER INF ! ');
-
-    var strtext = req.cookies.cart_itemlist;
-    xcontent += "<BR><p> " + strtext + "</p>";
-    //
-    strtext = atob(strtext);
-    xcontent += "<BR>atob <p> " + strtext + "</p>";
-    //
-    strtext = escape(strtext);
-    xcontent += "<BR>escape <p> " + strtext + "</p>";
-    //
-    strtext = decodeURIComponent(strtext);
-    xcontent += "<BR>decodeURIComponent <p> " + strtext + "</p>";
-    ///
-    var itemlist  = JSON.parse(strtext);
-
-    console.log("\n\t ", xcontent);
     
     res.render("pages/order", {title: "ATN-Shop ORDER page", 
-        content: xcontent , itemlist: itemlist,  // Object.values(itemlist)
+        content: xcontent , itemlist: req.session.cart,  // Object.values(itemlist)
         configHeader: configHeader  , currpage: "Order"  });
 
+}
+
+
+app.get('/order/add_to_cart', add_to_cart);
+function add_to_cart(req, res) {
+
+    var id = req.query.id;
+    var name = req.query.name;
+    var price = req.query.price;
+
+    if(!req.session.cart) req.session.cart = {};
+
+    if(id in req.session.cart) {
+        req.session.cart[id].qty++;
+    }else {
+        req.session.cart[id] = {
+            id: id,
+            name: name,
+            price: price,
+            qty: 1
+        }
+    }
+
+    res.send("?");
 }
 
 
@@ -353,9 +360,4 @@ function qrPage(req, res) {
 
 /// ------------------ gọi SERVER thực thi
 
-var server = app.listen( PORT , function () {
-   var host = server.address().address
-   var port = server.address().port
-   
-   console.log("SERVER http://%s:%s", host, port)
-});
+app.listen(process.env.PORT || 8081)
