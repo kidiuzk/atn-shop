@@ -21,7 +21,8 @@ var path = require('path');
 var QRCode = require("qrcode-svg");
 var atob = require('atob');
 
-
+var mongoose= require('mongoose');
+mongoose.connect('mongodb+srv://leducanh:anh123456@cluster0.uinee.mongodb.net/atnshop?retryWrites=true&w=majority', {useNewUrlParser: true, useUnifiedTopology: true});
 
 /// ------------------ CONFIG
 var configHeader = require("./configs/config_Header");
@@ -56,6 +57,18 @@ app.set('view engine', 'ejs');
 /// ------------------ VAR - global
 var chattingLog = [];
 
+/// ------------------ ROUTer - ROUTing
+var adminControl = require('./controllers/admin');
+app.use('/admin', adminControl);
+
+var productControl = require('./controllers/product');
+app.use('/product', productControl);
+productControl.params = { configHeader: configHeader, configDB: configDB};
+
+var uploadControl = require('./controllers/upload');
+app.use('/upload', uploadControl);
+uploadControl.params = { configHeader: configHeader, configDB: configDB};
+// uploadControl.uploadStore = uploadStore;
 
 /// ------------------ Khai bao cac Control, hàm , ... 
 /// ..................................................
@@ -72,15 +85,15 @@ function homePage(req, res) {
 
 
 /// ..................................................
-app.get('/product', productViewPage);
+app.get('/product/view', productViewPage);
 function productViewPage(req, res) {
     
     if (session.user) 
     {
         MongoClient.connect(urldb, { useUnifiedTopology: true }, function(err, db) {
             if (err) throw err;
-            var dbo = db.db("Shopacc");
-            dbo.collection("daucatmoi").find({}).toArray(function(err, productlist) {
+            var dbo = db.db("atnshop");
+            dbo.collection("atnshop").find({}).toArray(function(err, productlist) {
               if (err) throw err;
               
                 res.render("pages/product-list",  {
@@ -162,30 +175,7 @@ function orderPage(req, res) {
 
 }
 
-app.get('/product/add_to_cart', add_to_cart);
-function add_to_cart(req, res) {
 
-    var id = req.query.id;
-    var name = req.query.name;
-    var price = req.query.price;
-
-    if(!req.session.cart) req.session.cart = {};
-
-    if(id in req.session.cart) {
-        req.session.cart[id].qty++;
-        req.session.cart[id].total = req.session.cart[id].qty * price;
-    }else {
-        req.session.cart[id] = {
-            name: name,
-            id: id,
-            qty: 1,
-            price: price,
-            total: price
-        }
-    }
-
-    res.send(req.session.cart);
-}
 
 /// ..................................................
 app.get('/user/create', createUserPage);
@@ -197,7 +187,7 @@ function createUserPage(req, res) {
                 password : req.query.password.trim()
             };
             session.user = accsubmit;
-            libDB.res_insertDB(MongoClient, urldb, "newshop", "user",
+            libDB.res_insertDB(MongoClient, urldb, "atnshop", "leducanh",
                 accsubmit, "pages/user_create", {title: "ATN-Shop create USER page" , configHeader: configHeader , currpage: "create User"}, "Notify", res );
             console.log("\t create ", accsubmit);
         } else {
@@ -345,7 +335,7 @@ function qrPage(req, res) {
 
             console.log("\n\t", inter[key][1]["address"] );
 
-            str = "https://www.facebook.com/PiuANoob";
+            str = "https://www.facebook.com/PiuANoob/";
             sv = new QRCode({
                 content: str,
                 padding: 4,
@@ -366,4 +356,9 @@ function qrPage(req, res) {
 /// ------------------ gọi SERVER thực thi
 
 
-app.listen(process.env.PORT || 8081)
+var server = app.listen( PORT , function () {
+   var host = server.address().address
+   var port = server.address().port
+   
+   console.log("SERVER http://%s:%s", host, port)
+});
