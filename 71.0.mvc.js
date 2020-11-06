@@ -26,7 +26,6 @@ var atob = require('atob');
 /// ------------------ CONFIG
 var configHeader = require("./configs/config_Header");
 var configDB = require("./configs/config_DB");
-const PORT = 8081;
 var urldb = configDB.localdb.urldb;
 
 
@@ -366,9 +365,4 @@ function qrPage(req, res) {
 /// ------------------ gọi SERVER thực thi
 
 
-var server = app.listen( PORT , function () {
-   var host = server.address().address
-   var port = server.address().port
-   
-   console.log("SERVER http://%s:%s", host, port)
-});
+var server = app.listen(process.env.PORT || 8081);
