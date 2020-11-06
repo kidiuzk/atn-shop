@@ -26,7 +26,7 @@ var atob = require('atob');
 var configHeader = require("./configs/config_Header");
 var configDB = require("./configs/config_DB");
 const PORT = 8081;
-var urldb = configDB.clouddb.urldb;
+var urldb = configDB.localdb.urldb;
 
 
 /// ------------------ Khai bao LIB tự viết
@@ -90,8 +90,8 @@ function productViewPage(req, res) {
     {
         MongoClient.connect(urldb, { useUnifiedTopology: true }, function(err, db) {
             if (err) throw err;
-            var dbo = db.db("Shopacc");
-            dbo.collection("daucatmoi").find({}).toArray(function(err, productlist) {
+            var dbo = db.db("atnshop");
+            dbo.collection("atnshop").find({}).toArray(function(err, productlist) {
               if (err) throw err;
               
                 res.render("pages/product-list",  {
