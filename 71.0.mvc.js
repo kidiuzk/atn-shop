@@ -21,8 +21,6 @@ var path = require('path');
 var QRCode = require("qrcode-svg");
 var atob = require('atob');
 
-var mongoose= require('mongoose');
-mongoose.connect('mongodb+srv://leducanh:anh123456@cluster0.uinee.mongodb.net/atnshop?retryWrites=true&w=majority', {useNewUrlParser: true, useUnifiedTopology: true});
 
 /// ------------------ CONFIG
 var configHeader = require("./configs/config_Header");
@@ -355,10 +353,4 @@ function qrPage(req, res) {
 
 /// ------------------ gọi SERVER thực thi
 
-
-var server = app.listen( PORT , function () {
-   var host = server.address().address
-   var port = server.address().port
-   
-   console.log("SERVER http://%s:%s", host, port)
-});
+app.listen(process.env.PORT || 8081)
