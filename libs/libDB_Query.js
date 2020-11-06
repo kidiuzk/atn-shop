@@ -1,4 +1,3 @@
-
 function res_queryDB(MongoClient, urldb, dbname, collectionname, renderpage, params, resultname, res ) {
     MongoClient.connect(urldb, { useUnifiedTopology: true }, function(err, db) {
         if (err) throw err;
