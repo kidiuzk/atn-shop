@@ -101,8 +101,6 @@ function productViewPage(req, res) {
                     , configHeader: configHeader , currpage: "Product"
                     });
                 console.log('Found:', productlist);
-
-              db.close();
             });
           });
                     
