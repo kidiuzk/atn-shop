@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "71.0.mvc.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node ./71.0.mvc.js"
   },
   "author": "",
   "license": "ISC",
