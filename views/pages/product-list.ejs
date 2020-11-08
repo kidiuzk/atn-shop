@@ -12,13 +12,6 @@
         <main>
             <div class="container" style="text-align: center;" >
                 <div class="row">
-                    <div style="text-align: center;">
-                        <p>
-                            <audio controls autoplay loop hidden="true">
-                            <source src="/audio/buy.mp3" type="audio/mpeg">          
-                            </audio>
-                        </p>
-                        </div>
                     <%products.forEach(function(product) { %>
                         <%- include('product-one', {product: product}); %>
                     <% }); %>
